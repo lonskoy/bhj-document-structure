@@ -2,6 +2,7 @@ const arrLink = [...document.getElementsByClassName('has-tooltip')];
 let helpDiv = document.createElement('div');
 let xParrent = null;
 let widthParrent = null;
+let count = 0;  //счетчик для скрытия подсказки при повторном щелчке
 
 function createDiv(elem) { 
     helpDiv.innerText = elem.getAttribute('title');
@@ -41,26 +42,34 @@ function createDiv(elem) {
 }
 
 arrLink.forEach(elem => {
-    elem.addEventListener('mousedown', (event) => {
+    elem.addEventListener('click', (event) => {
         event.preventDefault();
-        elem.appendChild(createDiv(elem)).classList.toggle('tooltip_active');    //Вставляем подсказку в DOM- дерево, в качестве потомка элемента на который кликнули
-        let widthDiv = helpDiv.offsetWidth;                                      //Получаем ширины подсказки
+        if(count === 0) {
+            elem.appendChild(createDiv(elem)).classList.toggle('tooltip_active');    //Вставляем подсказку в DOM- дерево, в качестве потомка элемента на который кликнули
+            let widthDiv = helpDiv.offsetWidth;                                      //Получаем ширины подсказки
 
-        switch(helpDiv.getAttribute('data-position')) {
-            case 'left' :
-                helpDiv.style.left = (xParrent - widthDiv - 5) + 'px'; 
-    
-            break;
-    
-            case 'right' :
-                helpDiv.style.left = (xParrent + widthParrent + 5) + 'px';
-                
-            break;
-    
-            default:
-                return
-        }
-       
+            switch(helpDiv.getAttribute('data-position')) {
+                case 'left' :
+                    helpDiv.style.left = (xParrent - widthDiv - 5) + 'px'; 
+                    ++count;
         
+                break;
+        
+                case 'right' :
+                    helpDiv.style.left = (xParrent + widthParrent + 5) + 'px';
+                    ++count;
+                    
+                break;
+        
+                default:
+                    return
+            }
+        }
+        else {
+            elem.appendChild(createDiv(elem)).classList.remove('tooltip_active');
+            count = 0;
+        }
+
     });
+
 });

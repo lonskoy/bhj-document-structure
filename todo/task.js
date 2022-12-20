@@ -2,7 +2,7 @@ const inputText = document.getElementById('task__input');
 const btn = document.getElementById('tasks__add');
 const taskList = document.getElementById('tasks__list');
 const storage = window.localStorage;
-count = 0;
+let count = 0;
 
 
 function addTask() {
@@ -18,6 +18,7 @@ function addTask() {
     taskRemove.innerHTML = '&times;'
     taskRemove.addEventListener('click', () => {
         taskObj.remove();
+        storage.key(index).remove();
     });
 
     taskObj.appendChild(taskTitle);
@@ -31,7 +32,7 @@ function addTask() {
 }
 
 function checkInput() {
-    if(inputText.value) {
+    if(inputText.value.trim()) {
         addTask();
     }   
 }
@@ -64,12 +65,6 @@ function addTaskCash() {
 btn.addEventListener('click', (event) => {
     event.preventDefault();
     checkInput()
-});
-
-inputText.addEventListener('keydown', (k) => {
-    if(k.code === 13) {
-        checkInput()
-    }
 });
 
 window.addEventListener('load', ()=> {
