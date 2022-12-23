@@ -9,7 +9,9 @@ btnPlusReduce.forEach(elem => {                   //Делаем функцио�
         if(elem.classList.contains('product__quantity-control_dec')) {
             elem.nextElementSibling.textContent > 0 ? --elem.nextElementSibling.textContent: elem.nextElementSibling.textContent === 0; 
         }
-        ++elem.previousElementSibling.textContent; 
+        else {
+            ++elem.previousElementSibling.textContent; 
+        }
     });
 });
 
@@ -26,6 +28,8 @@ function itemInBasket(elem) {                          //Добавление н
     let srcImg = elem.closest('.product__controls').previousElementSibling.getAttribute('src'); // Ссылка на картинку
     let quantity = elem.previousElementSibling.children[1].textContent.trim(); // Количество товара в корзине
     let dataId = elem.closest('.product').getAttribute('data-id');
+
+    if(quantity > 0) {
 
     let product = document.createElement('div');
     product.className = 'cart__product';
@@ -44,6 +48,8 @@ function itemInBasket(elem) {                          //Добавление н
     product.appendChild(productCount);
 
     cart.appendChild(product);
+
+    }
     
 }
 
@@ -56,7 +62,8 @@ function plusQuantity (elem) {                  //Изменение колич�
     tempArrCart.forEach(elem => {
         let tempIDCart = elem.getAttribute('data-id');
         if(tempIDCart === tempIdProduct) {
-            elem.children[1].textContent += tempQuantityProduct;  //КАК СДЕЛАТЬ ЧТО БЫ ПЛЮСОВАЛОСЬ А НЕ СКЛАДЫВАЛОСЬ?
+            let i = Number(elem.children[1].textContent);
+            elem.children[1].textContent = i + Number(tempQuantityProduct) ;  
         }
     });
     

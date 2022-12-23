@@ -2,7 +2,8 @@ const arrLink = [...document.getElementsByClassName('has-tooltip')];
 let helpDiv = document.createElement('div');
 let xParrent = null;
 let widthParrent = null;
-let count = 0;  //счетчик для скрытия подсказки при повторном щелчке
+/*let count = 0;  //счетчик для скрытия подсказки при повторном щелчке*/
+let tempData = null;
 
 function createDiv(elem) { 
     helpDiv.innerText = elem.getAttribute('title');
@@ -44,20 +45,22 @@ function createDiv(elem) {
 arrLink.forEach(elem => {
     elem.addEventListener('click', (event) => {
         event.preventDefault();
-        if(count === 0) {
-            elem.appendChild(createDiv(elem)).classList.toggle('tooltip_active');    //Вставляем подсказку в DOM- дерево, в качестве потомка элемента на который кликнули
+        
+        if(tempData !== elem.getAttribute('title')) {
+            tempData = elem.getAttribute('title');
+            elem.appendChild(createDiv(elem)).classList.add('tooltip_active');    //Вставляем подсказку в DOM- дерево, в качестве потомка элемента на который кликнули
             let widthDiv = helpDiv.offsetWidth;                                      //Получаем ширины подсказки
 
             switch(helpDiv.getAttribute('data-position')) {
                 case 'left' :
                     helpDiv.style.left = (xParrent - widthDiv - 5) + 'px'; 
-                    ++count;
+               
         
                 break;
         
                 case 'right' :
                     helpDiv.style.left = (xParrent + widthParrent + 5) + 'px';
-                    ++count;
+               
                     
                 break;
         
@@ -65,10 +68,12 @@ arrLink.forEach(elem => {
                     return
             }
         }
-        else {
+        else{
             elem.appendChild(createDiv(elem)).classList.remove('tooltip_active');
-            count = 0;
+            tempData = null;
         }
+        
+
 
     });
 
